@@ -8,7 +8,8 @@ import Register from './components/Register'
 import Login from './components/Login'
 
 function App() {
-  const [currentUsername, setCurrentUsername] = useState(null)
+  const myStorage = window.localStorage
+  const [currentUsername, setCurrentUsername] = useState(myStorage.getItem('user'))
   const [showRegister, setShowRegister] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
   const [pins, setPins] = useState([])
@@ -81,6 +82,13 @@ function App() {
     }
     getPins()
   }, [])
+
+  const handleLogout = () => {
+    myStorage.removeItem('user')
+    setCurrentUsername(null)
+    setShowRegister(false)
+    setShowLogin(true)
+  }
 
   return (
     <div className='App'>
@@ -181,7 +189,9 @@ function App() {
           </>
         )}
         {currentUsername ? (
-          <button className='button logout'>logout</button>
+          <button className='button logout' onClick={handleLogout}>
+            logout
+          </button>
         ) : (
           <div className='buttons'>
             <button className='button login' onClick={() => setShowLogin(true)}>
@@ -193,7 +203,9 @@ function App() {
           </div>
         )}
         {showRegister && <Register setShowRegister={setShowRegister} />}
-        {showLogin && <Login setShowLogin={setShowLogin} />}
+        {showLogin && (
+          <Login setShowLogin={setShowLogin} myStorage={myStorage} setCurrentUsername={setCurrentUsername} />
+        )}
       </ReactMapGL>
     </div>
   )
