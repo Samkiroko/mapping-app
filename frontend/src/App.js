@@ -1,15 +1,19 @@
-import { useState, useEffect } from 'react'
+import './app.css'
 import ReactMapGL, { Marker, Popup } from 'react-map-gl'
+import { useEffect, useState } from 'react'
 import { Room, Star } from '@material-ui/icons'
 import axios from 'axios'
 import { format } from 'timeago.js'
-import './app.css'
+import Register from './components/Register'
 
 function App() {
-  const currentUsername = 'john'
+  const [currentUsername, setCurrentUsername] = useState(null)
   const [pins, setPins] = useState([])
   const [currentPlaceId, setCurrentPlaceId] = useState(null)
   const [newPlace, setNewPlace] = useState(null)
+  const [title, setTitle] = useState(null)
+  const [desc, setDesc] = useState(null)
+  const [star, setStar] = useState(0)
   const [viewport, setViewport] = useState({
     width: '100vw',
     height: '100vh',
@@ -43,15 +47,47 @@ function App() {
     })
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const newPin = {
+      username: currentUsername,
+      title,
+      desc,
+      rating: star,
+      lat: newPlace.lat,
+      long: newPlace.long,
+    }
+
+    try {
+      const res = await axios.post('/pins', newPin)
+      setPins([...pins, res.data])
+      setNewPlace(null)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    const getPins = async () => {
+      try {
+        const allPins = await axios.get('/pins')
+        setPins(allPins.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getPins()
+  }, [])
+
   return (
     <div className='App'>
       <ReactMapGL
         {...viewport}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
-        onViewportChange={(nextViewport) => setViewport(nextViewport)}
-        mapStyle='mapbox://styles/samkiroko/ckrhfb4wq6bdj17qyhlkkf1ja'
-        onDblClick={handleAddClick}
-        transitionDuration='200'>
+        transitionDuration='200'
+        mapStyle='mapbox://styles/safak/cknndpyfq268f17p53nmpwira'
+        onViewportChange={(viewport) => setViewport(viewport)}
+        onDblClick={currentUsername && handleAddClick}>
         {pins.map((p) => (
           <>
             <Marker
@@ -116,7 +152,7 @@ function App() {
               closeOnClick={false}
               onClose={() => setNewPlace(null)}
               anchor='left'>
-              {/* <div>
+              <div>
                 <form onSubmit={handleSubmit}>
                   <label>Title</label>
                   <input placeholder='Enter a title' autoFocus onChange={(e) => setTitle(e.target.value)} />
@@ -137,10 +173,19 @@ function App() {
                     Add Pin
                   </button>
                 </form>
-              </div> */}
+              </div>
             </Popup>
           </>
         )}
+        {currentUsername ? (
+          <button className='button logout'>logout</button>
+        ) : (
+          <div className='buttons'>
+            <button className='button login'>login</button>
+            <button className='button logout'>Register</button>
+          </div>
+        )}
+        <Register />
       </ReactMapGL>
     </div>
   )
