@@ -5,9 +5,12 @@ import { Room, Star } from '@material-ui/icons'
 import axios from 'axios'
 import { format } from 'timeago.js'
 import Register from './components/Register'
+import Login from './components/Login'
 
 function App() {
   const [currentUsername, setCurrentUsername] = useState(null)
+  const [showRegister, setShowRegister] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
   const [pins, setPins] = useState([])
   const [currentPlaceId, setCurrentPlaceId] = useState(null)
   const [newPlace, setNewPlace] = useState(null)
@@ -181,11 +184,16 @@ function App() {
           <button className='button logout'>logout</button>
         ) : (
           <div className='buttons'>
-            <button className='button login'>login</button>
-            <button className='button logout'>Register</button>
+            <button className='button login' onClick={() => setShowLogin(true)}>
+              login
+            </button>
+            <button className='button logout' onClick={() => setShowRegister(true)}>
+              Register
+            </button>
           </div>
         )}
-        <Register />
+        {showRegister && <Register setShowRegister={setShowRegister} />}
+        {showLogin && <Login setShowLogin={setShowLogin} />}
       </ReactMapGL>
     </div>
   )
