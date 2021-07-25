@@ -7,7 +7,7 @@ const pinRoute = require('./routes/pins')
 
 dotenv.config()
 
-const PORT = process.env.PORT || 8800
+const PORT = process.env.PORT || 8080
 
 app.use(express.json())
 

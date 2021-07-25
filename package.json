@@ -25,9 +25,9 @@
         "build": "cd frontend && yarn build",
         "install-frontend": "cd frontend && npm install ",
         "heroku-postbuild": "npm run install-frontend && npm run build",
-        "start": "cd frontend && react-scripts start",
-        "client": "cd frontend && npm start",
-        "dev": "concurrently -n 'server,client' -c 'red,green'  \"nodemon server.js\" \"npm run frontend\""
+        "client": "cd frontend && react-scripts start",
+        "backend": "cd backend && yarn start",
+        "start": "concurrently -n 'server, client'  -c 'red, green'  \"nodemon backend\" \"npm run client\""
     },
     "eslintConfig": {
         "extends": [
