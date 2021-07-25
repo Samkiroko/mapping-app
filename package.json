@@ -25,9 +25,9 @@
         "build": "cd frontend && npm run build",
         "install-frontend": "cd frontend && npm install ",
         "heroku-postbuild": "npm run install-frontend && npm run build",
-        "start": "react-scripts start",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "start": "cd frontend && react-scripts start",
+        "client": "cd frontend && npm start",
+        "dev": "concurrently -n 'server,client' -c 'red,green'  \"nodemon server.js\" \"npm run frontend\""
     },
     "eslintConfig": {
         "extends": [
