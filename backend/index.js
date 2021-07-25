@@ -7,6 +7,8 @@ const pinRoute = require('./routes/pins')
 
 dotenv.config()
 
+const PORT = process.env.PORT || 8800
+
 app.use(express.json())
 
 mongoose
@@ -21,6 +23,10 @@ mongoose
 app.use('/api/users', userRoute)
 app.use('/api/pins', pinRoute)
 
-app.listen(8800, () => {
+app.listen(PORT, () => {
   console.log('Backend server is running!')
 })
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('frontend/build'))
+}
