@@ -22,7 +22,7 @@
         "nodemon": "^2.0.12"
     },
     "scripts": {
-        "build": "cd frontend && npm run build",
+        "build": "cd frontend && yarn build",
         "install-frontend": "cd frontend && npm install ",
         "heroku-postbuild": "npm run install-frontend && npm run build",
         "start": "cd frontend && react-scripts start",
